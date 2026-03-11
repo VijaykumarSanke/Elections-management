@@ -1,0 +1,134 @@
+ELECTIONS MANAGEMENT SYSTEM
+
+A secure and user-friendly web application designed to manage college elections. 
+It enables voter registration, authentication, secure voting, and real-time result tracking.
+
+--------------------------------------------------
+FEATURES
+--------------------------------------------------
+- Secure Authentication – Login using voter ID and password
+- User Registration – New voters can register with validation
+- Secure Voting System – Each voter can vote only once
+- Password Recovery – Retrieve forgotten voter ID or password
+- Results Dashboard – View election results in real time
+- SQL Injection Protection – Uses prepared statements
+- Session Management – Secure user session handling
+- Responsive Interface – Works on mobile and desktop devices
+
+--------------------------------------------------
+TECH STACK
+--------------------------------------------------
+Frontend : HTML5, CSS3, JavaScript
+Backend  : PHP
+Database : MySQL
+Server   : Apache (XAMPP)
+
+--------------------------------------------------
+PROJECT STRUCTURE
+--------------------------------------------------
+
+Elections-management/
+
+index.html                     - Landing page
+login.html / login.php         - User authentication
+register.html / register.php   - User registration
+election.html / election.js    - Voting interface
+vote.php                       - Vote submission
+results.php                    - Election results processing
+view_results.html              - Results display
+forgot_voter_id.html / .php    - Password recovery
+registration_confirmation.php  - Registration confirmation
+verify_password.php            - Password verification
+README.md                      - Project documentation
+
+--------------------------------------------------
+INSTALLATION
+--------------------------------------------------
+
+1. Clone the repository
+
+git clone https://github.com/VijaykumarSanke/Elections-management.git
+cd Elections-management
+
+2. Create database
+
+CREATE DATABASE secure_elections;
+
+3. Create users table
+
+CREATE TABLE users (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ vote_id VARCHAR(255) UNIQUE NOT NULL,
+ password VARCHAR(255) NOT NULL,
+ email VARCHAR(255),
+ has_voted BOOLEAN DEFAULT FALSE,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+4. Create candidates table
+
+CREATE TABLE candidates (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(255) NOT NULL,
+ position VARCHAR(255) NOT NULL,
+ votes INT DEFAULT 0
+);
+
+5. Move project to XAMPP folder
+
+C:/xampp/htdocs/Elections-management/
+
+6. Start Apache and MySQL
+
+7. Run in browser
+
+http://localhost/Elections-management/
+
+--------------------------------------------------
+USAGE
+--------------------------------------------------
+
+For Voters
+1. Register with voter ID and password
+2. Login
+3. Vote for candidate
+4. View results
+
+For Administrators
+- Monitor voting progress
+- Manage users via database
+- Configure candidates
+- View results
+
+--------------------------------------------------
+SECURITY FEATURES
+--------------------------------------------------
+
+Password Hashing
+Passwords are hashed using password_hash()
+
+SQL Injection Protection
+Prepared statements used
+
+Session Security
+Session-based authentication
+
+Input Validation
+Client-side and server-side validation
+
+Vote Integrity
+One vote per voter
+
+--------------------------------------------------
+LICENSE
+--------------------------------------------------
+
+MIT License
+
+--------------------------------------------------
+AUTHOR
+--------------------------------------------------
+
+Vijaykumar Sanke
+GitHub: https://github.com/VijaykumarSanke
+Email: vijaykumar.sanke7@gmail.com
