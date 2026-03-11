@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Election</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: translateY(-100px) translateX(50px) scale(1.2);
+                opacity: 0.4;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header img {
+            height: 100px;
+            margin-right: 20px;
+            animation: rotateIn 1s ease-out;
+        }
+
+        @keyframes rotateIn {
+            from {
+                transform: rotate(-180deg) scale(0);
+            }
+            to {
+                transform: rotate(0) scale(1);
+            }
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .campus-title {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        .campus-title h1 {
+            font-size: 56px;
+            color: #667eea;
+            text-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .campus-title h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+            gap: 60px;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .buttons button {
+            position: relative;
+            padding: 20px 40px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .buttons button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .buttons button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .buttons button:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+        }
+
+        .buttons button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .buttons button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .image-container {
+            position: relative;
+            animation: floatImage 3s ease-in-out infinite;
+        }
+
+        @keyframes floatImage {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .animation-image {
+            width: 350px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s ease;
+        }
+
+        .animation-image:hover {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .glow-effect {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            filter: blur(20px);
+            opacity: 0.6;
+            z-index: -1;
+            animation: rotateGlow 4s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            0% {
+                filter: blur(20px) hue-rotate(0deg);
+            }
+            100% {
+                filter: blur(20px) hue-rotate(360deg);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .campus-title h1 {
+                font-size: 36px;
+            }
+
+            .content {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .animation-image {
+                width: 280px;
+            }
+
+            .buttons button {
+                font-size: 18px;
+                padding: 18px 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <img src="Official_logo_of_VNRVJIET.png" alt="College Logo">
+            <h1>Vallurupalli Nageswara Rao Vignana Jyothi Institute of Engineering & Technology</h1>
+        </div>
+        
+        <div class="campus-title">
+            <h1>CAMPUS DEMOCRACY</h1>
+        </div>
+        
+        <div class="content">
+            <div class="buttons">
+                <button onclick="location.href='participate.html'">
+                    <span>🗳️ Participate in Elections</span>
+                </button>
+                <button onclick="location.href='view_results.html'">
+                    <span>📊 View Results</span>
+                </button>
+            </div>
+            
+            <div class="image-container">
+                <div class="glow-effect"></div>
+                <img src="voting.jpg" alt="Election Image" class="animation-image">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create animated particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 40 + 15;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        // Add ripple effect on button clicks
+        document.querySelectorAll('.buttons button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+</body>
+</html>

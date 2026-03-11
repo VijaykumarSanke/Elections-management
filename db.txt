@@ -1,0 +1,40 @@
+-- Create the database
+CREATE DATABASE secure_elections;
+
+-- Use the database
+USE secure_elections;
+
+-- Create students table to store eligible students
+CREATE TABLE students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    roll_no VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL
+);
+
+-- Create users table to store registered users
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    roll_no VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL,
+    vote_id VARCHAR(5) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    has_voted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create votes table to store votes
+CREATE TABLE votes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    candidate VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Insert sample data for eligible students
+INSERT INTO students (name, roll_no, email) VALUES
+('John Doe', '22004-cs-001', 'john.doe@example.com'),
+('Jane Smith', '23004-ee-002', 'jane.smith@example.com');
