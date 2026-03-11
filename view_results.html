@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Results</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background: url('images/logbkgrd.png') no-repeat center center fixed; /* Add your background image */
+    background-size: cover; /* Ensure the background image covers the entire page */
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center; /* Center the container horizontally */
+    align-items: center; /* Center the container vertically */
+}
+
+.container {
+    width: 100%;
+    max-width: 400px; /* Adjust the width to make it more compact */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center; /* Center-align text inside container */
+}
+
+h1 {
+    font-size: 36px; /* Increased font size */
+    margin-bottom: 20px;
+}
+
+form input[type="password"] {
+    display: block;
+    width: calc(100% - 20px);
+    padding: 15px;
+    margin: 10px auto 20px auto;
+    font-size: 18px; /* Increased font size */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button,
+button.home-button {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    padding: 15px;
+    margin: 10px auto;
+    font-size: 18px; /* Increased font size */
+    cursor: pointer;
+    border: none;
+    color: #fff;
+    background-color: #007bff; /* Blue */
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+form button:hover,
+button.home-button:hover {
+    background-color: #0056b3; /* Darker blue */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Password to View Results</h1>
+        <form method="POST" action="verify_password.php">
+            <input type="password" name="admin_password" placeholder="Password" required>
+            <button type="submit">Submit</button>
+        </form>
+        <button onclick="location.href='index.html'">Go to Home Page</button>
+    </div>
+</body>
+</html>
