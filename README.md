@@ -1,134 +1,104 @@
-ELECTIONS MANAGEMENT SYSTEM
+# College Elections Management System
 
-A secure and user-friendly web application designed to manage college elections. 
-It enables voter registration, authentication, secure voting, and real-time result tracking.
+A web-based voting system for college elections, built with PHP and MySQL. Only eligible students can register, email OTP verification confirms their identity, and each voter can cast one vote across the election categories.
 
---------------------------------------------------
-FEATURES
---------------------------------------------------
-- Secure Authentication – Login using voter ID and password
-- User Registration – New voters can register with validation
-- Secure Voting System – Each voter can vote only once
-- Password Recovery – Retrieve forgotten voter ID or password
-- Results Dashboard – View election results in real time
-- SQL Injection Protection – Uses prepared statements
-- Session Management – Secure user session handling
-- Responsive Interface – Works on mobile and desktop devices
+## Features
 
---------------------------------------------------
-TECH STACK
---------------------------------------------------
-Frontend : HTML5, CSS3, JavaScript
-Backend  : PHP
-Database : MySQL
-Server   : Apache (XAMPP)
+- **Eligibility check** – registration is limited to students listed in the `students` table. The roll-number format is validated, and the name, email and EduPrime password must match the student records.
+- **Email OTP verification** – a one-time code is sent by email (PHPMailer over SMTP/STARTTLS). Codes are 6 digits and expire after 10 minutes. Resending is supported.
+- **Voter ID and password login** – each registered student receives a 5-digit voter ID. Passwords are hashed with `password_hash()` and checked with `password_verify()`. Sessions keep users logged in.
+- **One vote per voter** – before inserting votes, the system checks whether the user has already voted. Votes are recorded for three categories: Sports Incharge, Co-Curricular Activities Incharge and General Activity Incharge.
+- **Results page** – vote counts per candidate and the leading candidate(s) for each category. The results page is protected by an admin password.
+- **Voter ID recovery** – a forgot-voter-ID flow.
+- **SQL injection protection** – prepared statements are used for database queries.
+- **Input validation** – on both the client and the server.
 
---------------------------------------------------
-PROJECT STRUCTURE
---------------------------------------------------
+## Tech Stack
 
+| Layer | Technology |
+|---|---|
+| Frontend | HTML, CSS, JavaScript |
+| Backend | PHP |
+| Database | MySQL |
+| Email | PHPMailer (Composer) |
+| Server | Apache (XAMPP) |
+
+## Project Structure
+
+```
 Elections-management/
+├── index.html                    # Landing page
+├── register.html / register.php  # Registration form and validation
+├── send_otp.php                  # Eligibility check + sends OTP email
+├── verify_otp.html               # OTP entry page
+├── verify_otp_process.php        # Verifies the OTP
+├── resend_otp.php                # Resends the OTP
+├── otp_functions.php             # OTP generation, storage, email sending
+├── email_config.php              # SMTP and OTP settings (do not commit real credentials)
+├── login.html / login.php        # Voter login
+├── election.html / vote.php      # Voting page and vote submission
+├── view_results.html             # Admin password form for results
+├── verify_password.php           # Checks the admin password
+├── results.php                   # Results per category
+├── forgot_voter_id.html / .php   # Voter ID recovery
+├── registration_confirmation.php # Shows the voter ID after registration
+├── config.php                    # Timezone and DB connection helper
+├── db.txt                        # Base database schema
+└── composer.json                 # PHPMailer dependency
+```
 
-index.html                     - Landing page
-login.html / login.php         - User authentication
-register.html / register.php   - User registration
-election.html / election.js    - Voting interface
-vote.php                       - Vote submission
-results.php                    - Election results processing
-view_results.html              - Results display
-forgot_voter_id.html / .php    - Password recovery
-registration_confirmation.php  - Registration confirmation
-verify_password.php            - Password verification
-README.md                      - Project documentation
+## Getting Started
 
---------------------------------------------------
-INSTALLATION
---------------------------------------------------
+1. Clone the repository into your XAMPP `htdocs` folder:
+   ```bash
+   git clone https://github.com/VijaykumarSanke/Elections-management.git
+   ```
+   For example: `C:/xampp/htdocs/Elections-management/`
+2. Install dependencies (skip if the `vendor/` folder is present):
+   ```bash
+   composer install
+   ```
+3. Start **Apache** and **MySQL** in XAMPP.
+4. Create the database and tables by running the SQL in `db.txt`, then add the extra table and column the code also needs:
+   ```sql
+   USE secure_elections;
 
-1. Clone the repository
+   ALTER TABLE students ADD COLUMN eduprime_password VARCHAR(255);
 
-git clone https://github.com/VijaykumarSanke/Elections-management.git
-cd Elections-management
+   CREATE TABLE otp_verifications (
+       id INT AUTO_INCREMENT PRIMARY KEY,
+       email VARCHAR(255) NOT NULL,
+       otp VARCHAR(10) NOT NULL,
+       expires_at DATETIME NOT NULL,
+       verified BOOLEAN DEFAULT FALSE,
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   );
+   ```
+5. Add your eligible students to the `students` table.
+6. Open `email_config.php` and set your SMTP host, username, password and sender details. Use an app password for Gmail, and never commit real credentials.
+7. Open http://localhost/Elections-management/
 
-2. Create database
+## How It Works
 
-CREATE DATABASE secure_elections;
+1. **Register** – the student enters name, roll number, email and passwords. The system checks eligibility against the `students` table.
+2. **Verify** – an OTP is emailed. After the student enters it correctly, registration is completed and a voter ID is issued.
+3. **Log in** – the student logs in with the voter ID and password.
+4. **Vote** – the student selects one candidate in each category and submits. A second attempt is rejected.
+5. **Results** – an admin enters the results password to view the counts.
 
-3. Create users table
+## Limitations
 
-CREATE TABLE users (
- id INT AUTO_INCREMENT PRIMARY KEY,
- vote_id VARCHAR(255) UNIQUE NOT NULL,
- password VARCHAR(255) NOT NULL,
- email VARCHAR(255),
- has_voted BOOLEAN DEFAULT FALSE,
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+- Candidate names are defined in the code rather than managed from an admin screen.
+- There is a single admin password for results and no full admin panel.
+- Voter IDs are 5 digits, so the system is suited to a college-scale election.
+- The project is for learning and has not been through a security audit.
 
-4. Create candidates table
+## Future Improvements
 
-CREATE TABLE candidates (
- id INT AUTO_INCREMENT PRIMARY KEY,
- name VARCHAR(255) NOT NULL,
- position VARCHAR(255) NOT NULL,
- votes INT DEFAULT 0
-);
+- Admin panel for managing candidates, voters and election dates
+- Stronger voter ID generation and OTP attempt limits
+- Automated tests
 
-5. Move project to XAMPP folder
+## Author
 
-C:/xampp/htdocs/Elections-management/
-
-6. Start Apache and MySQL
-
-7. Run in browser
-
-http://localhost/Elections-management/
-
---------------------------------------------------
-USAGE
---------------------------------------------------
-
-For Voters
-1. Register with voter ID and password
-2. Login
-3. Vote for candidate
-4. View results
-
-For Administrators
-- Monitor voting progress
-- Manage users via database
-- Configure candidates
-- View results
-
---------------------------------------------------
-SECURITY FEATURES
---------------------------------------------------
-
-Password Hashing
-Passwords are hashed using password_hash()
-
-SQL Injection Protection
-Prepared statements used
-
-Session Security
-Session-based authentication
-
-Input Validation
-Client-side and server-side validation
-
-Vote Integrity
-One vote per voter
-
---------------------------------------------------
-LICENSE
---------------------------------------------------
-
-MIT License
-
---------------------------------------------------
-AUTHOR
---------------------------------------------------
-
-Vijaykumar Sanke
-GitHub: https://github.com/VijaykumarSanke
-Email: vijaykumar.sanke7@gmail.com
+Sanke Vijaykumar – [GitHub](https://github.com/VijaykumarSanke) · vijaykumar.sanke7@gmail.com
